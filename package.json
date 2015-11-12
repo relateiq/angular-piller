@@ -20,7 +20,10 @@
     "start": "bin/iqb start",
     "preversion": "bin/iqb test"
   },
-  "dependencies": {},
+  "dependencies": {
+    "angular": "~1.4.7",
+    "piller": "~0.1.0"
+  },
   "devDependencies": {
     "chokidar-cli": "~1.0.1",
     "tape": "~4.2.1"

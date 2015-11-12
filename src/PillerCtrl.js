@@ -1,12 +1,12 @@
-var piller = require('piller');
-
 var moduleName = 'PillerCtrl';
 
 module.exports = moduleName;
 
-angular.module(moduleName, [])
+angular.module(moduleName, [
+  require('./PillerSrvc')
+])
 
-.controller(moduleName, function($scope) {
+.controller(moduleName, function($scope, PillerSrvc) {
   var PillerCtrl = this;
 
   PillerCtrl.init = init;
@@ -17,7 +17,7 @@ angular.module(moduleName, [])
 
     initOptions();
 
-    PillerCtrl.pillerInstance = piller(container, function() {
+    PillerCtrl.pillerInstance = PillerSrvc.create(container, function() {
       return $scope.pillCorpus || [];
     }, $scope.pillerOptions, textarea);
 
@@ -51,8 +51,7 @@ angular.module(moduleName, [])
     return PillerCtrl.pillerInstance.modelValue;
   }
 
-  function onPillerModelChange() {
-    var text = PillerCtrl.pillerInstance.modelValue && PillerCtrl.pillerInstance.modelValue.text || '';
-    PillerCtrl.ngModel.$setViewValue(text);
+  function onPillerModelChange(modelValue) {
+    PillerCtrl.ngModel.$setViewValue(modelValue && modelValue.text || '');
   }
 });

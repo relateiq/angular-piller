@@ -1,11 +1,21 @@
-    <html>
-        <head>
-            <title>angular-piller</title>
-            <link rel="stylesheet" type="text/css" href="angular-piller.scss" />
-        </head>
-        <body>
-            <h1>It Works!</h1>
+<html>
+    <head>
+        <title>angular-piller</title>
+        <style>
+          body {
+            margin: 50px;
+          }
 
-            <script src="app.js"></script>
-        </body>
-    </html>
+          .piller {
+            width: 500px;
+            max-height: 300px;
+          }
+        </style>
+    </head>
+    <body ng-app="AngularPillerApp" ng-controller="AppCtrl">
+        
+        <piller ng-model="pillerModel" piller-options="pillerOptions" pill-corpus="pillCorpus"></piller>
+
+        <script src="app.js"></script>
+    </body>
+</html>

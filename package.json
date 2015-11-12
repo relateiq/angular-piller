@@ -29,6 +29,6 @@
     "tape": "~4.2.1"
   },
   "publishConfig": {
-    "registry": "https://relateiq.artifactoryonline.com/relateiq/api/npm/npm-local/"
+    "registry": "https://registry.npmjs.org/"
   }
 }

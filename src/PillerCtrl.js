@@ -10,21 +10,31 @@ angular.module(moduleName, [
   var PillerCtrl = this;
 
   PillerCtrl.init = init;
+  PillerCtrl.initTextarea = initTextarea;
 
 
-  function init(container, textarea, ngModel) {
-    PillerCtrl.ngModel = ngModel;
+  function init(container, ngModel) {
+    PillerCtrl.ngModel = PillerCtrl.ngModel || ngModel;
+
+    if (!PillerCtrl.ngModel) {
+      throw new Error('angular-piller: ng-model is required from <piller/> or [piller-textarea]');
+    }
 
     initOptions();
 
     PillerCtrl.pillerInstance = PillerSrvc.create(container, function() {
       return $scope.pillCorpus || [];
-    }, $scope.pillerOptions, textarea);
+    }, $scope.pillerOptions, PillerCtrl.textarea);
 
     PillerCtrl.ngModel.$render = render;
     PillerCtrl.ngModel.$parsers.push(parser);
 
     watchOptions();
+  }
+
+  function initTextarea(textarea, ngModel) {
+    PillerCtrl.ngModel = ngModel;
+    PillerCtrl.textarea = textarea;
   }
 
   function initOptions() {

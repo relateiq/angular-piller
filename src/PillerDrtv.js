@@ -16,15 +16,11 @@ angular.module(moduleName, [
       pillerOptions: '=',
       showSearchMatches: '&'
     },
-    require: ['piller', 'ngModel'],
+    require: ['piller', '?ngModel'],
     controller: PillerCtrl,
     controllerAs: PillerCtrl,
     link: function($scope, $elem, attrs, ctrls) {
-      var PillerCtrl = ctrls[0];
-      var elem = $elem[0];
-      var pillerTextarea = elem.querySelector('[piller-textarea]');
-
-      PillerCtrl.init(elem, pillerTextarea, ctrls[1]);
+      ctrls[0].init($elem[0], ctrls[1]);
     }
   };
 });

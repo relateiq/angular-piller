@@ -13,7 +13,8 @@ angular.module(moduleName, [
     restrict: 'E',
     scope: {
       pillCorpus: '=',
-      pillerOptions: '='
+      pillerOptions: '=',
+      showSearchMatches: '&'
     },
     require: ['piller', 'ngModel'],
     controller: PillerCtrl,

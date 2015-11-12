@@ -30,6 +30,12 @@ angular.module(moduleName, [
   function initOptions() {
     $scope.pillerOptions = $scope.pillerOptions || {};
     $scope.pillerOptions.onModelChange = onPillerModelChange;
+    $scope.pillerOptions.showSearchMatches = function(matches) {
+      $scope.showSearchMatches({
+        pillerInstance: PillerCtrl.pillerInstance,
+        matches: matches
+      });
+    };
   }
 
   function watchOptions() {

@@ -14,7 +14,13 @@
     </head>
     <body ng-app="AngularPillerApp" ng-controller="AppCtrl">
         
-        <piller ng-model="pillerModel" piller-options="pillerOptions" pill-corpus="pillCorpus"></piller>
+        <piller 
+            ng-model="pillerModel"
+            piller-options="pillerOptions"
+            pill-corpus="pillCorpus"
+            show-search-matches="showPillerSearchMatches(pillerInstance, matches)"
+        ></piller>
+        <div class="matches"></div>
 
         <script src="app.js"></script>
     </body>

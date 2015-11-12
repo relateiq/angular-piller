@@ -1,13 +1,21 @@
 require('angular');
 
 angular.module('AngularPillerApp', [
-  require('../src')
+  require('../src'),
+  require('./SearchDisplay')
 ])
 
-.controller('AppCtrl', function($scope, PillerSrvc) {
+.controller('AppCtrl', function($scope, PillerSrvc, SearchDisplaySrvc) {
   $scope.pillerModel = null;
-  $scope.pillerOptions = {};
+  $scope.pillerOptions = {
+    storageKey: 'myStorageKey',
+    scrollable: true
+  };
   $scope.pillCorpus = createPillCorpus();
+
+  $scope.showPillerSearchMatches = function(pillerInstance, matches) {
+    SearchDisplaySrvc.showSearchMatches(pillerInstance, $scope.pillCorpus, matches);
+  };
 
   function createPillCorpus() {
     var peoplePills = [{

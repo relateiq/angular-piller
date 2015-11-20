@@ -1,4 +1,14 @@
-#!/bin/bash -e
+#!/bin/bash
+
+self=$0
+command=$1
+shift
+
+# allow normal shell commands to be executed (eg: npm install)
+# # when the script is used as an ENTRYPOINT for a docker container
+if [ "$command" = "exec" ]; then
+    exec "$@"
+fi
 
 #################################################################################
 # environment checks for parallel and jq
@@ -29,15 +39,11 @@ export SASS_CMD=node_modules/node-sass/bin/node-sass
 PARALLEL_CMD='parallel --line-buffer --halt 2'
 
 # read some names out of the package.json
-export ENTRY_POINT=$(cat package.json | jq -r .main);
-export DEFAULT_NAME=$(cat package.json | jq -r .name);
+export ENTRY_POINT=$(jq -r .main package.json);
+export DEFAULT_NAME=$(jq -r .name package.json);
 
 # configuration settings
-export FEAT_APP=$(cat package.json | jq -r .iqproj.app)
-
-self=$0
-command=$1
-shift
+export FEAT_APP=$(jq -r .iqproj.app package.json)
 
 #################################################################################
 # utilities
@@ -71,6 +77,9 @@ fi
 #################################################################################
 # Built-in [standard] commands
 # Any of these can be overridden by creating a `build/<taskname>` file
+START_TIME=$(node -e "console.log(+new Date())")
+
+set -e
 case $command in
     # npm lifecycle commands
     "test")
@@ -83,7 +92,7 @@ case $command in
 
     # basic housekeeping tasks
     "clean")      rm -rf release/* ;;
-    "assets")     [ -d assets ] && cp -R assets release ;;
+    "assets")     [ -d src/assets ] && cp -R src/assets release ;;
 
     # testing
     "watch:test") 
@@ -99,8 +108,11 @@ case $command in
     "build:js")   $BROWSERIFY_CMD $ENTRY_POINT -d | $EXORCIST_CMD release/${DEFAULT_NAME}.js.map > release/${DEFAULT_NAME}.js ;;
 
     # scss feature
-    "watch:scss") $self build:scss&& $WATCH_CMD --silent 'src/**/*.scss' -c "$self build:scss" ;;
-    "build:scss") [ -f src/${DEFAULT_NAME}.scss ] && $SASS_CMD src/${DEFAULT_NAME}.scss > release/${DEFAULT_NAME}.css ;;
+    "watch:scss") $self build:scss && $WATCH_CMD --silent 'src/**/*.scss' -c "$self build:scss" ;;
+    "build:scss")
+        [ -f src/scss/${DEFAULT_NAME}.scss ] && ($SASS_CMD src/scss/${DEFAULT_NAME}.scss > release/${DEFAULT_NAME}.css || exit 1);
+        [ -f src/scss/app.scss ] && ($SASS_CMD src/scss/app.scss > release/app.css || exit 1);
+        ;;
 
     # app feature
     "watch:html") $self build:html && $WATCH_CMD --silent app/* -c "$self build:html" ;;
@@ -116,7 +128,7 @@ case $command in
 
     # entry points
     "start"|"watch")
-        features=("$self watch:test")
+        features=("$self assets" "$self watch:test")
 
         if [ "$FEAT_APP" = "true" ]; then
             features+=(
@@ -152,5 +164,9 @@ case $command in
         exit 1
 esac
 
-echo "---DONE: $command $*"
+END_TIME=$(node -e "console.log(+new Date())")
+ELAPSED=$(( $END_TIME - $START_TIME ))
+TIMESTR=$(node -e "console.log($ELAPSED < 1000 ? $ELAPSED + 'ms' : ($ELAPSED / 1000.0) + 's')");
+
+echo "---DONE [ $TIMESTR ] $command $*"
 

@@ -11,7 +11,8 @@ angular.module(moduleName, [
 .directive('piller', function() {
   return {
     restrict: 'E',
-    scope: {
+    scope: true,
+    bindToController: {
       pillCorpus: '=',
       pillerOptions: '=',
       showSearchMatches: '&'

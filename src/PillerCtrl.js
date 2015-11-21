@@ -23,8 +23,8 @@ angular.module(moduleName, [
     initOptions();
 
     PillerCtrl.pillerInstance = PillerSrvc.create(container, function() {
-      return $scope.pillCorpus || [];
-    }, $scope.pillerOptions, PillerCtrl.textarea);
+      return PillerCtrl.pillCorpus || [];
+    }, PillerCtrl.pillerOptions, PillerCtrl.textarea);
 
     PillerCtrl.ngModel.$render = render;
     PillerCtrl.ngModel.$parsers.push(parser);
@@ -38,10 +38,10 @@ angular.module(moduleName, [
   }
 
   function initOptions() {
-    $scope.pillerOptions = $scope.pillerOptions || {};
-    $scope.pillerOptions.onModelChange = onPillerModelChange;
-    $scope.pillerOptions.showSearchMatches = function(matches) {
-      $scope.showSearchMatches({
+    PillerCtrl.pillerOptions = PillerCtrl.pillerOptions || {};
+    PillerCtrl.pillerOptions.onModelChange = onPillerModelChange;
+    PillerCtrl.pillerOptions.showSearchMatches = function(matches) {
+      PillerCtrl.showSearchMatches({
         pillerInstance: PillerCtrl.pillerInstance,
         matches: matches
       });
@@ -49,7 +49,7 @@ angular.module(moduleName, [
   }
 
   function watchOptions() {
-    $scope.$watchCollection('pillerOptions', function(newValue, oldValue) {
+    $scope.$watchCollection('PillerCtrl.pillerOptions', function(newValue, oldValue) {
       if (
         (newValue && !oldValue) ||
         (newValue && oldValue && newValue.storageKey !== oldValue.storageKey)

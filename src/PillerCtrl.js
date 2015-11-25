@@ -28,6 +28,7 @@ angular.module(moduleName, [
 
     PillerCtrl.ngModel.$render = render;
     PillerCtrl.ngModel.$parsers.push(parser);
+    PillerCtrl.ngModel.$formatters.unshift(formatter);
 
     watchOptions();
   }
@@ -72,6 +73,10 @@ angular.module(moduleName, [
 
   function parser() {
     return PillerCtrl.pillerInstance.modelValue;
+  }
+
+  function formatter() {
+    return PillerCtrl.pillerInstance.modelValue && PillerCtrl.pillerInstance.modelValue.text || '';
   }
 
   function onPillerModelChange(modelValue) {

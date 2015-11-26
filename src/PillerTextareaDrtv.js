@@ -9,7 +9,7 @@ angular.module(moduleName, [])
     restrict: 'A',
     require: ['^piller', '?ngModel'],
     link: function($scope, $elem, attrs, ctrls) {
-      ctrls[0].initTextarea($elem[0], ctrls[1], $scope.$eval(attrs.ngModel));
+      ctrls[0].initTextarea($elem[0], ctrls[1]);
     }
   };
 });

@@ -13,9 +13,8 @@ angular.module(moduleName, [
   PillerCtrl.initTextarea = initTextarea;
 
 
-  function init(container, ngModel, initialModelValue) {
+  function init(container, ngModel) {
     PillerCtrl.ngModel = ngModel || PillerCtrl.ngModel;
-    PillerCtrl.initialModelValue = initialModelValue || PillerCtrl.initialModelValue;
 
     if (!PillerCtrl.ngModel) {
       throw new Error('angular-piller: ng-model is required from <piller/> or [piller-textarea]');
@@ -31,20 +30,12 @@ angular.module(moduleName, [
     PillerCtrl.ngModel.$parsers.push(parser);
     PillerCtrl.ngModel.$formatters.unshift(formatter);
 
-    if (PillerCtrl.initialModelValue) {
-      // set manually first because ngModel doesn't pick it up in time
-      PillerCtrl.ngModel.$modelValue = PillerCtrl.initialModelValue;
-      PillerCtrl.initialModelValue = null; // don't leak memory
-      render();
-    }
-
     watchOptions();
   }
 
-  function initTextarea(textarea, ngModel, initialModelValue) {
+  function initTextarea(textarea, ngModel) {
     PillerCtrl.ngModel = ngModel;
     PillerCtrl.textarea = textarea;
-    PillerCtrl.initialModelValue = initialModelValue;
   }
 
   function initOptions() {

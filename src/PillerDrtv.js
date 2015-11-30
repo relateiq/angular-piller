@@ -21,7 +21,7 @@ angular.module(moduleName, [
     controller: PillerCtrl,
     controllerAs: PillerCtrl,
     link: function($scope, $elem, attrs, ctrls) {
-      ctrls[0].init($elem[0], ctrls[1]);
+      ctrls[0].init($elem[0], ctrls[1], $scope.$eval(attrs.ngModel));
     }
   };
 });

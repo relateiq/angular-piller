@@ -1,6 +1,6 @@
 {
   "name": "angular-piller",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "a template for basic js packages",
   "main": "src/index.js",
   "author": "aliatsis@salesforce.com",

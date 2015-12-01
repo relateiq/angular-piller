@@ -23,20 +23,18 @@ angular.module(moduleName, [
 
     initOptions();
 
-    PillerCtrl.pillerInstance = PillerSrvc.create(container, function() {
+    PillerCtrl.pillerInstance = PillerSrvc.create(PillerCtrl.initialModelValue, container, function() {
       return PillerCtrl.pillCorpus || [];
     }, PillerCtrl.pillerOptions, PillerCtrl.textarea);
 
     PillerCtrl.ngModel.$render = render;
     PillerCtrl.ngModel.$parsers.push(parser);
-    PillerCtrl.ngModel.$formatters.unshift(formatter);
+    PillerCtrl.ngModel.$formatters.push(formatter);
 
-    if (PillerCtrl.initialModelValue) {
-      // set manually first because ngModel doesn't pick it up in time
-      PillerCtrl.ngModel.$modelValue = PillerCtrl.initialModelValue;
-      PillerCtrl.initialModelValue = null; // don't leak memory
-      render();
-    }
+    // this is unfortunate but necessary because ngModel parsers can not be setup until the pillerInstance is declared
+    PillerCtrl.ngModel.$$parseAndValidate();
+
+    PillerCtrl.initialModelValue = null; // don't leak memory
 
     watchOptions();
   }
@@ -84,8 +82,8 @@ angular.module(moduleName, [
     return PillerCtrl.pillerInstance.modelValue;
   }
 
-  function formatter() {
-    return PillerCtrl.pillerInstance.modelValue && PillerCtrl.pillerInstance.modelValue.text || '';
+  function formatter(modelValue) {
+    return modelValue && modelValue.text || '';
   }
 
   function onPillerModelChange(modelValue) {
